@@ -18,6 +18,9 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
+      - name: Traer las etiquetas de versión del proyecto original
+        # el número de versión se calcula a partir de las etiquetas, que no se copiaron al fork
+        run: git fetch --tags https://github.com/BimmerGestalt/AAIdrive.git
       - name: Preparar Java 17
         uses: actions/setup-java@v4
         with:
