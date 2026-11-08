@@ -37,6 +37,17 @@ jobs:
             external
       - name: Descargar dependencias externas
         uses: ./.github/actions/download-externals-action
+      - name: Usar la clave de firma fija de B48 Live
+        # sin esta clave, cada compilación se firmaría distinto y no se podría instalar encima
+        env:
+          DEBUG_KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$DEBUG_KEYSTORE_B64" ]; then
+            echo "::error::Falta el secreto DEBUG_KEYSTORE_B64 en Settings > Secrets and variables > Actions"
+            exit 1
+          fi
+          mkdir -p ~/.android
+          echo "$DEBUG_KEYSTORE_B64" | base64 -d > ~/.android/debug.keystore
       - name: Compilar APK
         run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
       - name: Subir APK
