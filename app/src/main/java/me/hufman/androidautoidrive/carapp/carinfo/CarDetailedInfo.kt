@@ -309,6 +309,8 @@ class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics
 
 	private val motorTiming = MotorData.ignitionTiming.orDash("%.1f").map { "Avance  $it°" }
 	private val motorEgt = MotorData.exhaustTemp.orDash("%.0f").map { "Gases esc.  $it °C" }
+	private val motorLambdaPre = MotorData.lambdaPre.orDash("%.3f").map { "Lambda pre-cat  λ $it" }
+	private val motorLambdaPost = MotorData.lambdaPostVolts.orDash("%.2f").map { "Lambda post-cat  $it V" }
 	private val motorCorrections = MotorData.ignitionCorrections.mapIndexed { index, flow ->
 		flow.orDash("%.1f").map { "Corr. cil ${index + 1}  $it°" }
 	}
@@ -323,6 +325,7 @@ class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics
 			motorTiming, motorEgt,
 			motorCorrections[0], motorCorrections[1],
 			motorCorrections[2], motorCorrections[3],
+			motorLambdaPre, motorLambdaPost,
 			motorAdapter
 	)
 

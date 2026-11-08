@@ -26,6 +26,12 @@ object MotorData {
 	/** Temperatura de gases de escape (calculada por la DME), en °C */
 	val exhaustTemp = MutableStateFlow<Double?>(null)
 
+	/** Lambda real de la sonda antes del catalizador (banda ancha) */
+	val lambdaPre = MutableStateFlow<Double?>(null)
+
+	/** Tensión de la sonda después del catalizador/OPF, en voltios */
+	val lambdaPostVolts = MutableStateFlow<Double?>(null)
+
 	/** Modo de la válvula de escape pedido por el usuario */
 	val valveMode = MutableStateFlow(ValveMode.AUTO)
 
