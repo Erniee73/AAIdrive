@@ -6,6 +6,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   apk:
     runs-on: ubuntu-latest
@@ -42,3 +45,11 @@ jobs:
           name: AAIdrive-Ernesto
           retention-days: 30
           path: app/build/outputs/apk/**/*.apk
+      - name: Publicar el APK como descarga directa
+        # siempre en la misma versión "ultima", para descargarla desde el móvil sin zip
+        run: |
+          cp app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk AAIdrive-Ernesto.apk
+          gh release delete ultima --yes --cleanup-tag || true
+          gh release create ultima AAIdrive-Ernesto.apk --title "Última versión" --notes "Compilada desde ${GITHUB_SHA::7}" --latest
+        env:
+          GH_TOKEN: ${{ github.token }}
