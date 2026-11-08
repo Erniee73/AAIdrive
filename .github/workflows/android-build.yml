@@ -1,11 +1,8 @@
 name: build  # used as the badge name
 
+# En este fork solo se lanza a mano: el APK se compila con mi-apk.yml
 on:
-  push:
-    branches: ['*']
-    tags: ['*']
-  pull_request:
-    types: [opened, synchronize]
+  workflow_dispatch:
 
 env:
   KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
