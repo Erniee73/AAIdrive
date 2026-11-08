@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icono B48 Live: cuentavueltas con zona roja y aguja -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- arco principal -->
+    <path
+        android:pathData="M38.44,73.56 A22,22 0 1,1 76,58"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- zona roja -->
+    <path
+        android:pathData="M76,58 A22,22 0 0,1 69.56,73.56"
+        android:strokeColor="#E53935"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- marcas -->
+    <path
+        android:pathData="M54,40 L54,44 M38.44,42.44 L41.27,45.27 M69.56,42.44 L66.73,45.27 M36,58 L40,58"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+    <!-- aguja -->
+    <path
+        android:pathData="M54,58 L64,40.68"
+        android:strokeColor="#E53935"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <!-- eje -->
+    <path
+        android:pathData="M54,58 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
+        android:fillColor="#FFFFFF" />
+</vector>
