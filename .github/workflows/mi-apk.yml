@@ -42,14 +42,14 @@ jobs:
       - name: Subir APK
         uses: actions/upload-artifact@v4
         with:
-          name: AAIdrive-Ernesto
+          name: B48-Live
           retention-days: 30
           path: app/build/outputs/apk/**/*.apk
       - name: Publicar el APK como descarga directa
         # siempre en la misma versión "ultima", para descargarla desde el móvil sin zip
         run: |
-          cp app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk AAIdrive-Ernesto.apk
+          cp app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk B48-Live.apk
           gh release delete ultima --yes --cleanup-tag || true
-          gh release create ultima AAIdrive-Ernesto.apk --title "Última versión" --notes "Compilada desde ${GITHUB_SHA::7}" --latest
+          gh release create ultima B48-Live.apk --title "Última versión" --notes "Compilada desde ${GITHUB_SHA::7}" --latest
         env:
           GH_TOKEN: ${{ github.token }}
