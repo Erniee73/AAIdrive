@@ -1,0 +1,52 @@
+name: placa-escape
+
+# Compila el programa de la placa ESP32-C3 de la válvula y lo publica
+# como un único archivo .bin listo para cargar desde el navegador.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'placa-escape/**'
+      - '.github/workflows/placa-escape.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el proyecto
+        uses: actions/checkout@v4
+      - name: Instalar arduino-cli
+        uses: arduino/setup-arduino-cli@v2
+      - name: Instalar el soporte de ESP32
+        run: |
+          arduino-cli config init
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32@3.0.7
+      - name: Compilar
+        run: |
+          arduino-cli compile \
+            --fqbn "esp32:esp32:esp32c3:CDCOnBoot=cdc" \
+            --output-dir build \
+            placa-escape/b48_escape
+          ls -la build
+      - name: Juntar todo en un solo archivo
+        run: |
+          pip install --quiet esptool
+          BOOT_APP0=$(find ~/.arduino15/packages/esp32/hardware/esp32 -name boot_app0.bin | head -1)
+          esptool.py --chip esp32c3 merge_bin -o b48-escape.bin \
+            0x0 build/b48_escape.ino.bootloader.bin \
+            0x8000 build/b48_escape.ino.partitions.bin \
+            0xe000 "$BOOT_APP0" \
+            0x10000 build/b48_escape.ino.bin
+          ls -la b48-escape.bin
+      - name: Publicar
+        run: |
+          gh release delete placa --yes --cleanup-tag || true
+          gh release create placa b48-escape.bin --title "Placa de la válvula" --notes "Programa de la placa ESP32-C3 compilado desde ${GITHUB_SHA::7}. Cargar en la dirección 0x0." --latest=false
+        env:
+          GH_TOKEN: ${{ github.token }}
