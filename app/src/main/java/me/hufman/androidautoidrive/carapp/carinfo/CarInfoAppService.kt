@@ -11,6 +11,7 @@ class CarInfoAppService: CarAppService()  {
 
 	var carApp: CarInfoApp? = null
 	var readoutController: ReadoutCommandsReceiver? = null
+	var valveBoard: ValveBoardController? = null
 
 	override fun shouldStartApp(): Boolean = true
 
@@ -26,9 +27,14 @@ class CarInfoAppService: CarAppService()  {
 		this.carApp = carApp
 		readoutController = ReadoutCommandsReceiver(carApp.readoutCommands)
 		readoutController?.register(this, handler)
+
+		// placa de la válvula de escape por Bluetooth
+		valveBoard = ValveBoardController(applicationContext, handler).also { it.start() }
 	}
 
 	override fun onCarStop() {
+		valveBoard?.stop()
+		valveBoard = null
 		carApp?.disconnect()
 		carApp = null
 		readoutController?.unregister(this)

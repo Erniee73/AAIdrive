@@ -35,6 +35,12 @@ object MotorData {
 	/** Modo de la válvula de escape pedido por el usuario */
 	val valveMode = MutableStateFlow(ValveMode.AUTO)
 
+	/** Si la válvula está abierta según la última orden mandada (null = aún nada) */
+	val valveOpen = MutableStateFlow<Boolean?>(null)
+
+	/** Estado de la conexión con la placa de la válvula */
+	val valveBoardStatus = MutableStateFlow("Placa: sin conectar")
+
 	/** Estado de la conexión con el adaptador, para mostrarlo en pantalla */
 	val adapterStatus = MutableStateFlow("vLinker: sin conectar")
 }

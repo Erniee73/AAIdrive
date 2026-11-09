@@ -304,7 +304,15 @@ class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics
 	private val motorTorque = cdsMetrics.torque.map { "Par  %.0f Nm".format(it) }
 	private val motorRpm = cdsMetrics.engineRpm.map { "RPM  $it" }
 	private val motorGear = cdsMetrics.drivingGearName.map { "Marcha  $it" }
-	private val motorValve = MotorData.valveMode.map { "Escape: ${it.label}" }
+	private val motorValve = MotorData.valveMode.combine(MotorData.valveOpen) { mode, open ->
+		val state = when (open) {
+			true -> "abierta"
+			false -> "cerrada"
+			null -> "--"
+		}
+		"Escape: ${mode.label} · $state"
+	}
+	private val motorValveBoard: Flow<String> = MotorData.valveBoardStatus
 	private val motorAdapter: Flow<String> = MotorData.adapterStatus
 
 	private val motorTiming = MotorData.ignitionTiming.orDash("%.1f").map { "Avance  $it°" }
@@ -319,7 +327,7 @@ class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics
 			motorWater, motorOil,
 			motorBoost, motorTorque,
 			motorRpm, motorGear,
-			motorValve, motorAdapter
+			motorValve, motorValveBoard
 	)
 	private val motorAdvancedFields: List<Flow<String>> = listOf(
 			motorTiming, motorEgt,
