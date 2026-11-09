@@ -11,11 +11,6 @@ import java.text.DateFormat
 import java.util.*
 
 class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics) {
-	companion object {
-		const val MOTOR_TITLE = "Motor B48"
-		const val MOTOR_ADVANCED_TITLE = "Motor B48 avanzado ›"
-	}
-
 	// general car information
 
 	// RHD is guessed, defaults to LHD
@@ -293,52 +288,12 @@ class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics
 		distOrCityLabel, timeOrStreetLabel
 	)
 
-	// ---- Pantallas propias: Motor B48 ----
-	private fun Flow<Double?>.orDash(format: String): Flow<String> = this.map { value ->
-		if (value == null) "--" else format.format(value)
-	}
-
-	private val motorWater = cdsMetrics.engineTemp.map { "Agua  %.0f °C".format(it) }
-	private val motorOil = cdsMetrics.oilTemp.map { "Aceite  %.0f °C".format(it) }
-	private val motorBoost = MotorData.boostBar.orDash("%.2f").map { "Turbo  $it bar" }
-	private val motorTorque = cdsMetrics.torque.map { "Par  %.0f Nm".format(it) }
-	private val motorRpm = cdsMetrics.engineRpm.map { "RPM  $it" }
-	private val motorGear = cdsMetrics.drivingGearName.map { "Marcha  $it" }
-	private val motorValve = MotorData.valveMode.map { "Escape: ${it.label}" }
-	private val motorAdapter: Flow<String> = MotorData.adapterStatus
-
-	private val motorTiming = MotorData.ignitionTiming.orDash("%.1f").map { "Avance  $it°" }
-	private val motorEgt = MotorData.exhaustTemp.orDash("%.0f").map { "Gases esc.  $it °C" }
-	private val motorLambdaPre = MotorData.lambdaPre.orDash("%.3f").map { "Lambda pre-cat  λ $it" }
-	private val motorLambdaPost = MotorData.lambdaPostVolts.orDash("%.2f").map { "Lambda post-cat  $it V" }
-	private val motorCorrections = MotorData.ignitionCorrections.mapIndexed { index, flow ->
-		flow.orDash("%.1f").map { "Corr. cil ${index + 1}  $it°" }
-	}
-
-	private val motorMainFields: List<Flow<String>> = listOf(
-			motorWater, motorOil,
-			motorBoost, motorTorque,
-			motorRpm, motorGear,
-			motorValve, motorAdapter
-	)
-	private val motorAdvancedFields: List<Flow<String>> = listOf(
-			motorTiming, motorEgt,
-			motorCorrections[0], motorCorrections[1],
-			motorCorrections[2], motorCorrections[3],
-			motorLambdaPre, motorLambdaPost,
-			motorAdapter
-	)
-
 	val basicCategories = LinkedHashMap<String, List<Flow<String>>>().apply {
-		put(MOTOR_TITLE, motorMainFields)
-		put(MOTOR_ADVANCED_TITLE, motorAdvancedFields)
 		put(L.CARINFO_TITLE, overviewFields)
 		put(L.CARINFO_TITLE_DRIVING, drivingFields)
 		put(L.CARINFO_TITLE_SPORT, sportFields)
 	}
 	val advancedCategories = LinkedHashMap<String, List<Flow<String>>>().apply {
-		put(MOTOR_TITLE, motorMainFields)
-		put(MOTOR_ADVANCED_TITLE, motorAdvancedFields)
 		put(L.CARINFO_TITLE, overviewFields)
 		put(L.CARINFO_TITLE_DRIVING + " ", drivingAdvancedFields)   // slightly different key for the allCategories
 

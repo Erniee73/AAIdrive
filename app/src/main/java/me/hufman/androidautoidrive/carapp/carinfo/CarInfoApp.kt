@@ -147,12 +147,11 @@ class CarInfoApp(val iDriveConnectionStatus: IDriveConnectionStatus, val securit
 	@SuppressLint("ResourceType")
 	fun createAmApp() {
 		val name = L.CARINFO_TITLE
-		val carAppImage = try {
-			if (iDriveConnectionStatus.brand == "mini") {
-				Utils.convertPngToGrayscale(resources.openRawResource(R.drawable.ic_carinfo_mini).readBytes())
-			} else {
-				Utils.convertPngToGrayscale(resources.openRawResource(R.drawable.ic_carinfo_common).readBytes())
-			}
+		// icono pequeño (48x48), como las apps que sí muestran su entrada en el menú
+		val carAppImage: Any = try {
+			val drawableId = if (iDriveConnectionStatus.brand == "mini") R.drawable.ic_carinfo_mini else R.drawable.ic_carinfo_common
+			val drawable = androidx.core.content.res.ResourcesCompat.getDrawable(resources, drawableId, null)!!
+			me.hufman.androidautoidrive.utils.GraphicsHelpersAndroid().compress(drawable, 48, 48)
 		} catch (e: Resources.NotFoundException) { "" }
 
 		val amInfo = mutableMapOf<Int, Any>(

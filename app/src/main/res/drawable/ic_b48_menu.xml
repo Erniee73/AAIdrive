@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icono del menú del iDrive: el cuentavueltas recortado para que llene el icono -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="52"
+    android:viewportHeight="52">
+    <group android:translateX="-28" android:translateY="-33">
+        <path
+            android:pathData="M38.44,73.56 A22,22 0 1,1 76,58"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="4"
+            android:strokeLineCap="round"
+            android:fillColor="#00000000" />
+        <path
+            android:pathData="M76,58 A22,22 0 0,1 69.56,73.56"
+            android:strokeColor="#E53935"
+            android:strokeWidth="4"
+            android:strokeLineCap="round"
+            android:fillColor="#00000000" />
+        <path
+            android:pathData="M54,40 L54,44 M38.44,42.44 L41.27,45.27 M69.56,42.44 L66.73,45.27 M36,58 L40,58"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M54,58 L64,40.68"
+            android:strokeColor="#E53935"
+            android:strokeWidth="3"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M54,58 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
+            android:fillColor="#FFFFFF" />
+    </group>
+</vector>
