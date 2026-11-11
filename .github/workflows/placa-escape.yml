@@ -44,9 +44,20 @@ jobs:
             0xe000 "$BOOT_APP0" \
             0x10000 build/b48_escape.ino.bin
           ls -la b48-escape.bin
+      - name: Preparar el cargador para Windows (esptool oficial + programa)
+        run: |
+          mkdir -p esptool-win kit
+          gh release download -R espressif/esptool -p '*windows-amd64*' -D esptool-win
+          unzip -q esptool-win/*.zip -d esptool-win
+          cp -r $(dirname $(find esptool-win -name esptool.exe | head -1))/. kit/
+          cp b48-escape.bin placa-escape/windows/cargar-placa.bat kit/
+          (cd kit && zip -qr ../b48-escape-cargador-windows.zip .)
+          ls -la kit
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Publicar
         run: |
           gh release delete placa --yes --cleanup-tag || true
-          gh release create placa b48-escape.bin --title "Placa de la válvula" --notes "Programa de la placa ESP32-C3 compilado desde ${GITHUB_SHA::7}. Cargar en la dirección 0x0." --latest=false
+          gh release create placa b48-escape.bin b48-escape-cargador-windows.zip --title "Placa de la válvula" --notes "Programa de la placa ESP32-C3 compilado desde ${GITHUB_SHA::7}. Cargar en la dirección 0x0." --latest=false
         env:
           GH_TOKEN: ${{ github.token }}
