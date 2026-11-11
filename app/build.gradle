@@ -81,6 +81,16 @@ android {
 
     signingConfigs {
         release
+        // B48 Live: clave fija para las versiones debug, para poder instalar siempre encima
+        debug {
+            def fixedDebugKeystore = file("../b48-debug.keystore")
+            if (fixedDebugKeystore.exists()) {
+                storeFile fixedDebugKeystore
+                storePassword "android"
+                keyAlias "androiddebugkey"
+                keyPassword "android"
+            }
+        }
     }
     if (isRunningOnCI) {
         // configure keystore

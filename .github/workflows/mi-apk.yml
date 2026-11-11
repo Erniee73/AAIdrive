@@ -46,10 +46,14 @@ jobs:
             echo "::error::Falta el secreto DEBUG_KEYSTORE_B64 en Settings > Secrets and variables > Actions"
             exit 1
           fi
-          mkdir -p ~/.android
-          echo "$DEBUG_KEYSTORE_B64" | base64 -d > ~/.android/debug.keystore
+          echo "$DEBUG_KEYSTORE_B64" | base64 -d > b48-debug.keystore
       - name: Compilar APK
         run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
+      - name: Comprobar que la firma es la de B48 Live
+        run: |
+          APK=$(ls app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk | head -1)
+          keytool -printcert -jarfile "$APK" | tee firma.txt
+          grep -q "CN=B48 Live" firma.txt || { echo "::error::El APK no está firmado con la clave fija de B48 Live"; exit 1; }
       - name: Subir APK
         uses: actions/upload-artifact@v4
         with:
