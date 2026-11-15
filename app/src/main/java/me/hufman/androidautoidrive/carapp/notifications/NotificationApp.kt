@@ -390,15 +390,8 @@ class NotificationApp(val iDriveConnectionStatus: IDriveConnectionStatus, val se
 					viewList.showNotification(sbn)
 				}
 
-				val played = if (notificationSettings.shouldPlaySound()) {
-					audioPlayer.requestDuck()
-					audioPlayer.playRingtone(sbn.soundUri)
-				} else false
-
-				if (played) {
-					Thread.sleep(3000)
-				}
-				audioPlayer.releaseDuck()
+				// B48 Live: las notificaciones salen en pantalla en silencio,
+				// sin sonido ni bajar el volumen, para no cortar la música
 				readoutInteractions.triggerPopupReadout(sbn)
 			}
 		}
