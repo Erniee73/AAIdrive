@@ -225,6 +225,10 @@ class CarInfoApp(val iDriveConnectionStatus: IDriveConnectionStatus, val securit
 	}
 
 	fun initWidgets() {
+		// B48 Live: nombre de la entrada en el menú del iDrive (si el modelo es de texto libre)
+		carApp.components.values.filterIsInstance<RHMIComponent.EntryButton>().forEach { button ->
+			button.getModel()?.asRaDataModel()?.value = "Motor B48"
+		}
 		infoState.initWidgets()
 		categoryState.initWidgets()
 	}
