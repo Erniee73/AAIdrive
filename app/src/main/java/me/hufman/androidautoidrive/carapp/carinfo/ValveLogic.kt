@@ -11,13 +11,15 @@ package me.hufman.androidautoidrive.carapp.carinfo
  * Abrir / Cerrar a mano: se obedece al momento.
  */
 class ValveLogic(
-	val openRpm: Int = 2500,
-	val closeRpm: Int = 2200,
+	var openRpm: Int = 2500,
+	var closeRpm: Int = 2200,
 	val minChangeMs: Long = 3000,
 ) {
 	companion object {
 		val SPORT_MODES = setOf("Sport", "Sport+", "Race")
 	}
+	/** Modos en los que va siempre abierta (se puede cambiar desde los ajustes) */
+	var sportModes: Set<String> = SPORT_MODES
 
 	/** Lo último que se decidió, null si aún no se ha decidido nada */
 	var currentOpen: Boolean? = null
@@ -35,7 +37,7 @@ class ValveLogic(
 			MotorData.ValveMode.AUTO -> {
 				val current = currentOpen ?: false
 				when {
-					drivingMode in SPORT_MODES -> true
+					drivingMode in sportModes -> true
 					rpm == null -> current
 					current && rpm < closeRpm -> false
 					!current && rpm > openRpm -> true

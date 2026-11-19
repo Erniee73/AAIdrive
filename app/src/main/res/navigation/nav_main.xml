@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main"
-    app:startDestination="@id/nav_overview">
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="me.hufman.androidautoidrive.phoneui.fragments.B48HomeFragment"
+        android:label="@string/app_name" />
 
     <fragment
         android:id="@+id/nav_overview"

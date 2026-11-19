@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import me.hufman.androidautoidrive.*
 import me.hufman.androidautoidrive.databinding.NavHeaderBinding
@@ -43,22 +44,19 @@ class NavHostActivity: AppCompatActivity() {
 		val navView = findViewById<NavigationView>(R.id.nav_view)
 		setSupportActionBar(navToolbar)
 
-		// Set each of the menu entries as a top level destination
-		val navMenu = PopupMenu(this, null).menu.also {
-			MenuInflater(this).inflate(R.menu.menu_main, it)
-		}
+		// B48 Live: navegación con la barra inferior (Inicio, Música, Ajustes), sin menú lateral
 		val drawerLayout = findViewById<View>(R.id.drawer_layout) as? DrawerLayout
-		val appBarConfig = AppBarConfiguration(navMenu, drawerLayout)
+		drawerLayout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+		val appBarConfig = AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_music, R.id.nav_settings))
 		val navController = findNavController(R.id.nav_host_fragment)
 		setupActionBarWithNavController(navController, appBarConfig)        // title updater
-		navToolbar.setupWithNavController(navController, appBarConfig)     // hamburger click handler
-		navView.setupWithNavController(navController)                      // nav menu click handler
+		navToolbar.setupWithNavController(navController, appBarConfig)     // back arrow on inner pages
+		navView.setupWithNavController(navController)
+		findViewById<BottomNavigationView>(R.id.nav_bottom).setupWithNavController(navController)
 
 		setupNavHeader()
 
 		setupNavMenu()
-
-		drawerLayout?.post { drawerLayout.openDrawer(GravityCompat.START) }
 	}
 
 	override fun onResume() {

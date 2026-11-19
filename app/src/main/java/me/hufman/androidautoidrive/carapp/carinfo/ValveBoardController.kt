@@ -16,6 +16,7 @@ import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import me.hufman.androidautoidrive.AppSettings
 import me.hufman.androidautoidrive.CarInformation
 import me.hufman.androidautoidrive.CarThreadExceptionHandler
 import me.hufman.androidautoidrive.cds.CDSMetrics
@@ -82,6 +83,12 @@ class ValveBoardController(val context: Context, val handler: Handler) {
 	}
 
 	private fun evaluate() {
+		// ajustes del modo Auto elegidos en el móvil
+		val open = AppSettings[AppSettings.KEYS.VALVE_OPEN_RPM].toIntOrNull() ?: 2500
+		val close = AppSettings[AppSettings.KEYS.VALVE_CLOSE_RPM].toIntOrNull() ?: 2200
+		logic.openRpm = open
+		logic.closeRpm = minOf(close, open - 100)
+		logic.sportModes = AppSettings[AppSettings.KEYS.VALVE_SPORT_MODES].split(',').map { it.trim() }.filter { it.isNotEmpty() }.toSet()
 		val change = logic.update(MotorData.valveMode.value, lastDrivingMode, lastRpm, SystemClock.elapsedRealtime())
 		if (change != null) {
 			Log.i(TAG, "Válvula -> ${if (change) "abrir" else "cerrar"} (modo ${MotorData.valveMode.value}, $lastDrivingMode, $lastRpm rpm)")

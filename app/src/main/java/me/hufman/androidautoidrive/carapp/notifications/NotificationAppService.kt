@@ -19,7 +19,8 @@ class NotificationAppService: CarAppService() {
 	var carappStatusbar: ID5StatusbarApp? = null
 
 	override fun shouldStartApp(): Boolean {
-		return appSettings[AppSettings.KEYS.ENABLED_NOTIFICATIONS].toBoolean()
+		// B48 Live: notificaciones del móvil ocultas en el iDrive
+		return false
 	}
 
 	override fun onCarStart() {

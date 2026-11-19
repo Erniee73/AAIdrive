@@ -25,9 +25,22 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:id="@+id/nav_host_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_main" />
+
+        <!-- B48 Live: barra inferior con Inicio, Música y Ajustes -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+            android:background="#121215"
+            app:itemIconTint="@color/b48_bottom_item"
+            app:itemTextColor="@color/b48_bottom_item"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_bottom" />
     </LinearLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
