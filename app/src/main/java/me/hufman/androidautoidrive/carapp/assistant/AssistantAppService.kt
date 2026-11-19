@@ -8,8 +8,9 @@ import me.hufman.androidautoidrive.utils.GraphicsHelpersAndroid
 class AssistantAppService: CarAppService() {
 	var carappAssistant: AssistantApp? = null
 
+	// B48 Live: asistentes de voz (Bixby, Google) ocultos en el iDrive
 	override fun shouldStartApp(): Boolean {
-		return true
+		return false
 	}
 
 	override fun onCarStart() {

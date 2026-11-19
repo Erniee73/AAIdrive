@@ -49,6 +49,15 @@ jobs:
           echo "$DEBUG_KEYSTORE_B64" | base64 -d > b48-debug.keystore
       - name: Compilar APK
         run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
+      - name: Diagnóstico de textos del iDrive (idiomas de cada app)
+        continue-on-error: true
+        run: |
+          cd app/src/main/assets/carapplications
+          for z in $(find . -name texts.zip | sort); do echo "== $z"; unzip -Z1 "$z" | tr '\n' ' '; echo; done
+          for d in news multimedia spotify; do
+            echo "== $d entryButtons"; grep -o '<entryButton[^>]*>' $d/rhmi/ui_description.xml | head -5
+            grep -A3 '<entryButton' $d/rhmi/ui_description.xml | grep -o 'textId="[0-9]*"\|imageId="[0-9]*"\|model="[0-9]*"' | head -10
+          done
       - name: Comprobar que la firma es la de B48 Live
         run: |
           APK=$(ls app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk | head -1)
