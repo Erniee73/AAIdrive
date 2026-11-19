@@ -146,20 +146,17 @@ class CarInfoApp(val iDriveConnectionStatus: IDriveConnectionStatus, val securit
 
 	@SuppressLint("ResourceType")
 	fun createAmApp() {
-		val name = L.CARINFO_TITLE
+		// B48 Live: entrada con nombre e icono propios, junto a Spotify en "Apps para el smartphone"
+		val name = "Motor B48"
 		val carAppImage = try {
-			if (iDriveConnectionStatus.brand == "mini") {
-				Utils.convertPngToGrayscale(resources.openRawResource(R.drawable.ic_carinfo_mini).readBytes())
-			} else {
-				Utils.convertPngToGrayscale(resources.openRawResource(R.drawable.ic_carinfo_common).readBytes())
-			}
+			resources.openRawResource(R.drawable.ic_b48_am).readBytes()
 		} catch (e: Resources.NotFoundException) { "" }
 
 		val amInfo = mutableMapOf<Int, Any>(
 			0 to 145,   // basecore version
 			1 to name,  // app name
 			2 to carAppImage,
-			3 to AMCategory.VEHICLE_INFORMATION.value,   // section
+			3 to AMCategory.ONLINE_SERVICES.value,   // section
 			4 to true,
 			5 to 800,   // weight
 			8 to infoState.state.id  // mainstateId
@@ -226,8 +223,10 @@ class CarInfoApp(val iDriveConnectionStatus: IDriveConnectionStatus, val securit
 
 	fun initWidgets() {
 		// B48 Live: nombre de la entrada en el menú del iDrive (si el modelo es de texto libre)
+		// la entrada propia del RHMI sale en blanco (su texto e icono necesitan recursos firmados por BMW),
+		// así que se oculta y se entra por la entrada "Motor B48" de arriba
 		carApp.components.values.filterIsInstance<RHMIComponent.EntryButton>().forEach { button ->
-			button.getModel()?.asRaDataModel()?.value = "Motor B48"
+			try { button.setVisible(false) } catch (e: Exception) {}
 		}
 		infoState.initWidgets()
 		categoryState.initWidgets()
