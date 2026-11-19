@@ -49,6 +49,11 @@ jobs:
           echo "$DEBUG_KEYSTORE_B64" | base64 -d > b48-debug.keystore
       - name: Compilar APK
         run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
+      - name: Diagnóstico entrada del menú (news)
+        continue-on-error: true
+        run: |
+          f=app/src/main/assets/carapplications/news/rhmi/ui_description.xml
+          grep -n 'id="109"\|id="103"\|<entryButton' -A3 $f | head -30
       - name: Comprobar que la firma es la de B48 Live
         run: |
           APK=$(ls app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk | head -1)
