@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+def buildNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+
+android {
+    namespace 'es.erniee.b48escape'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'es.erniee.b48escape'
+        minSdk 29
+        targetSdk 34
+        versionCode buildNumber
+        versionName "0.1.${buildNumber}"
+    }
+
+    signingConfigs {
+        // misma clave fija que B48 Live, para poder instalar siempre encima
+        fixed {
+            storeFile file("../../b48-debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+    buildTypes {
+        debug {
+            if (file("../../b48-debug.keystore").exists()) {
+                signingConfig signingConfigs.fixed
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-service:2.8.7'
+    implementation 'androidx.car.app:app:1.4.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+}

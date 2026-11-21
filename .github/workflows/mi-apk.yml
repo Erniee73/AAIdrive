@@ -4,6 +4,7 @@ name: mi-apk
 on:
   push:
     branches: [main]
+    paths-ignore: ['escape-app/**', '.github/workflows/escape-apk.yml']
   workflow_dispatch:
 
 permissions:

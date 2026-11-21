@@ -1,0 +1,42 @@
+name: escape-apk
+
+# Compila la app B48 Escape (válvula de escape con Android Auto)
+on:
+  push:
+    branches: [main]
+    paths: ['escape-app/**', '.github/workflows/escape-apk.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      - name: Usar la clave de firma fija
+        env:
+          DEBUG_KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$DEBUG_KEYSTORE_B64" ]; then
+            echo "::error::Falta el secreto DEBUG_KEYSTORE_B64"; exit 1
+          fi
+          echo "$DEBUG_KEYSTORE_B64" | base64 -d > b48-debug.keystore
+      - name: Compilar APK
+        working-directory: escape-app
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
+      - name: Publicar el APK como descarga directa
+        run: |
+          cp escape-app/app/build/outputs/apk/debug/*.apk B48-Escape.apk
+          keytool -printcert -jarfile B48-Escape.apk | grep -q "CN=B48 Live" || { echo "::error::Firma incorrecta"; exit 1; }
+          gh release delete escape --yes --cleanup-tag || true
+          gh release create escape B48-Escape.apk --title "B48 Escape" --notes "Compilada desde ${GITHUB_SHA::7}" --latest=false
+        env:
+          GH_TOKEN: ${{ github.token }}
