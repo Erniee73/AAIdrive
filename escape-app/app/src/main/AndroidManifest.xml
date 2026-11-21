@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
-    <uses-permission android:name="androidx.car.app.ACCESS_SURFACE" />
 
     <application
         android:label="B48 Escape"
@@ -18,7 +17,6 @@
 
         <meta-data android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
-        <meta-data android:name="androidx.car.app.minCarApiLevel" android:value="1" />
 
         <activity android:name=".MainActivity" android:exported="true"
             android:screenOrientation="portrait">
@@ -31,12 +29,11 @@
         <service android:name=".EscapeService" android:exported="false"
             android:foregroundServiceType="connectedDevice" />
 
-        <!-- Pantalla "Escape" en Android Auto -->
-        <service android:name=".car.EscapeCarAppService" android:exported="true"
+        <!-- "Escape" en Android Auto, como fuente de audio (sin sonido) -->
+        <service android:name=".EscapeMediaService" android:exported="true"
             android:label="Escape" android:icon="@drawable/ic_launcher">
             <intent-filter>
-                <action android:name="androidx.car.app.CarAppService" />
-                <category android:name="androidx.car.app.category.IOT" />
+                <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
     </application>
