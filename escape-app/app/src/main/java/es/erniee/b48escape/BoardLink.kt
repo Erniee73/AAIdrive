@@ -19,6 +19,7 @@ class BoardLink(private val context: Context, private val handler: Handler) {
 		val SERVICE_UUID: UUID = UUID.fromString("6b7a0001-b48a-4c1e-9d3e-0e5c0a1f4800")
 		val CMD_UUID: UUID = UUID.fromString("6b7a0002-b48a-4c1e-9d3e-0e5c0a1f4800")
 		const val RETRY_MS = 8_000L
+		const val CONNECT_TIMEOUT_MS = 15_000L
 	}
 
 	private var running = false
@@ -41,6 +42,7 @@ class BoardLink(private val context: Context, private val handler: Handler) {
 	fun stop() {
 		running = false
 		handler.removeCallbacks(reconnect)
+		handler.removeCallbacks(connectTimeout)
 		try { gatt?.disconnect(); gatt?.close() } catch (e: Exception) {}
 		gatt = null
 		commandChar = null
@@ -73,12 +75,22 @@ class BoardLink(private val context: Context, private val handler: Handler) {
 		}
 		status(false, "Conectando…")
 		gatt = try {
-			device.connectGatt(context, true, gattCallback, BluetoothDevice.TRANSPORT_LE)
+			device.connectGatt(context, false, gattCallback, BluetoothDevice.TRANSPORT_LE)
 		} catch (e: SecurityException) { null }
 		if (gatt == null) handler.postDelayed(reconnect, RETRY_MS)
+		else handler.postDelayed(connectTimeout, CONNECT_TIMEOUT_MS)
+	}
+
+	/** Si en un rato no ha conectado, cerrar y volver a intentar */
+	private val connectTimeout = Runnable {
+		if (running && commandChar == null) {
+			try { gatt?.disconnect() } catch (e: SecurityException) {}
+			disconnected()
+		}
 	}
 
 	private fun disconnected() {
+		handler.removeCallbacks(connectTimeout)
 		try { gatt?.close() } catch (e: Exception) {}
 		gatt = null
 		commandChar = null
@@ -122,6 +134,7 @@ class BoardLink(private val context: Context, private val handler: Handler) {
 					return@post
 				}
 				commandChar = c
+				handler.removeCallbacks(connectTimeout)
 				status(true, "Conectada")
 				// la placa cierra al perder la conexión: volver a mandar lo que toca
 				pendingOpen = lastWanted
