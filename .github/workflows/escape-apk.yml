@@ -35,7 +35,7 @@ jobs:
       - name: Publicar el APK como descarga directa
         run: |
           cp escape-app/app/build/outputs/apk/debug/*.apk B48-Escape.apk
-          keytool -printcert -jarfile B48-Escape.apk | grep -q "CN=B48 Live" || { echo "::error::Firma incorrecta"; exit 1; }
+          $(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)apksigner verify --print-certs B48-Escape.apk | tee firma.txt; grep -q "CN=B48 Live" firma.txt || { echo "::error::Firma incorrecta"; exit 1; }
           gh release delete escape --yes --cleanup-tag || true
           gh release create escape B48-Escape.apk --title "B48 Escape" --notes "Compilada desde ${GITHUB_SHA::7}" --latest=false
         env:
