@@ -108,8 +108,8 @@ class MainActivity : AppCompatActivity() {
 		}
 
 		root.addView(TextView(this).apply {
-			text = android.text.SpannableString("B48 Escape").also {
-				it.setSpan(android.text.style.ForegroundColorSpan(RED), 4, 10, 0)
+			text = android.text.SpannableString("B48 Flap").also {
+				it.setSpan(android.text.style.ForegroundColorSpan(RED), 4, 8, 0)
 			}
 			textSize = 24f; setTextColor(Color.WHITE); typeface = Typeface.DEFAULT_BOLD
 		})
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
 		}, LinearLayout.LayoutParams(-1, -2).apply { topMargin = px(14) })
 
 		root.addView(TextView(this).apply {
-			text = "Apagar B48 Escape"; textSize = 14f; setTextColor(GREY); gravity = Gravity.CENTER
+			text = "Apagar B48 Flap"; textSize = 14f; setTextColor(GREY); gravity = Gravity.CENTER
 			setPadding(0, px(14), 0, px(14))
 			setOnClickListener { EscapeService.stop(this@MainActivity) }
 		})

@@ -35,7 +35,7 @@ class EscapeMediaService : MediaBrowserServiceCompat() {
 	override fun onCreate() {
 		super.onCreate()
 		Escape.init(this)
-		session = MediaSessionCompat(this, "Escape").apply {
+		session = MediaSessionCompat(this, "Flap").apply {
 			setCallback(callback)
 			isActive = true
 		}
@@ -131,9 +131,9 @@ class EscapeMediaService : MediaBrowserServiceCompat() {
 		Escape.rpm.value?.let { sub += "%,d rpm".format((it / 50) * 50).replace(',', '.') }
 		session.setMetadata(MediaMetadataCompat.Builder()
 			.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, "estado")
-			.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Escape · $valve")
+			.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "Flap · $valve")
 			.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, sub.joinToString(" · "))
-			.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Escape · $valve")
+			.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Flap · $valve")
 			.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, sub.joinToString(" · "))
 			.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, art)
 			.build())

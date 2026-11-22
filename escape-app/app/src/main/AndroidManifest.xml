@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 
     <application
-        android:label="B48 Escape"
+        android:label="B48 Flap"
         android:icon="@drawable/ic_launcher"
         android:roundIcon="@drawable/ic_launcher"
         android:theme="@style/Theme.AppCompat.NoActionBar"
@@ -31,7 +31,7 @@
 
         <!-- "Escape" en Android Auto, como fuente de audio (sin sonido) -->
         <service android:name=".EscapeMediaService" android:exported="true"
-            android:label="Escape" android:icon="@drawable/ic_launcher">
+            android:label="Flap" android:icon="@drawable/ic_launcher">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>

@@ -153,10 +153,9 @@ class EscapeService : LifecycleService() {
 
 	private fun buildNotification(): Notification {
 		val mode = Escape.mode.value
-		val title = "Escape · ${Escape.valveText().lowercase().replaceFirstChar { it.uppercase() }}"
+		val title = "Flap · ${Escape.valveText().lowercase().replaceFirstChar { it.uppercase() }}"
 		val parts = mutableListOf("Modo ${mode.label}")
 		Escape.drivingMode.value?.let { parts += it }
-		if (Escape.rpm.value != null) parts += "${Escape.rpmText()} rpm"
 		if (!Escape.boardConnected.value) parts += "placa: ${Escape.boardStatus.value.lowercase()}"
 		if (!Escape.obdConnected.value) parts += "vLinker: ${Escape.obdStatus.value.lowercase()}"
 		val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java),
